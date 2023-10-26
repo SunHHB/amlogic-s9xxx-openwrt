@@ -41,6 +41,7 @@ make_path="${PWD}"
 openwrt_dir="openwrt"
 imagebuilder_path="${make_path}/${openwrt_dir}"
 custom_files_path="${make_path}/config/imagebuilder/files"
+custom_files_packages="${make_path}/config/imagebuilder/packages"
 custom_config_file="${make_path}/config/imagebuilder/config"
 
 # Set default parameters
@@ -117,9 +118,16 @@ adjust_settings() {
 custom_packages() {
     cd ${imagebuilder_path}
     echo -e "${STEPS} Start adding custom packages..."
+    if [[ -d "${custom_files_packages}" ]]; then
+        # Copy custom packages
+        [[ -d "packages" ]] || mkdir -p packages
+        cp -rf ${custom_files_packages}/* packages
 
-    # Create a [ packages ] directory
-    [[ -d "packages" ]] || mkdir packages
+        sync && sleep 3
+        echo -e "${INFO} [ packages ] directory status: $(ls packages -l 2>/dev/null)"
+    else
+        echo -e "${INFO} No customized packages were added."
+    fi
 
     # Download luci-app-amlogic
     amlogic_api="https://api.github.com/repos/ophub/luci-app-amlogic/releases"
@@ -205,6 +213,7 @@ rebuild_firmware() {
         luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay  \
         \
         luci-app-amlogic luci-i18n-amlogic-zh-cn \
+        alist luci-app-alist \
         \
         ${config_list} \
         "

@@ -106,7 +106,8 @@ adjust_settings() {
     fi
 
     # For other files
-    # ......
+    # Force opkg to overwrite files
+    sed -i "s/install \$(BUILD_PACKAGES)/install \$(BUILD_PACKAGES) --force-overwrite/" Makefile
 
     sync && sleep 3
     echo -e "${INFO} [ openwrt ] directory status: $(ls -al 2>/dev/null)"

@@ -43,7 +43,7 @@ on:
           - eaidk-610
           - emb3531
           - fine3399
-          - firefly
+          - firefly-rk3399
           - ipc-r
           - king3399
           - kylin3399
@@ -74,6 +74,7 @@ on:
           - s905l3b-e900v22d
           - s905l3b-e900v22e
           - s905l3b-ip103h
+          - s905l3b-rg020et-ca
           - s905l3b-unt403a
           - s905lb-q96-mini
           - s905lb-r3300l

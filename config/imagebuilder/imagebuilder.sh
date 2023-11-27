@@ -145,8 +145,11 @@ custom_packages() {
     [[ "${?}" -eq "0" ]] || error_msg "[ ${amlogic_i18n} ] download failed!"
     echo -e "${INFO} The [ ${amlogic_i18n} ] is downloaded successfully."
 
-    # Download other luci-app-xxx
-    # ......
+    # Download other luci-app-xxx 下面链接是openwrt 21.02.7 T1盒子用的
+     wget https://github.com/SunHHB/luci-app-alist/releases/latest/download/openwrt-21.02.7-aarch64_cortex-a53.tar.gz
+     tar -zxvf openwrt-21.02.7-aarch64_cortex-a53.tar.gz
+     mv packages_ci/ packages
+     rm -rf openwrt-21.02.7-aarch64_cortex-a53.tar.gz
 
     sync && sleep 3
     echo -e "${INFO} [ packages ] directory status: $(ls packages -l 2>/dev/null)"

@@ -42,7 +42,6 @@ openwrt_dir="imagebuilder"
 imagebuilder_path="${make_path}/${openwrt_dir}"
 custom_files_path="${make_path}/config/imagebuilder/files"
 custom_config_file="${make_path}/config/imagebuilder/config"
-external_package_urls_path="${make_path}/config/imagebuilder/external-package-urls23.05.txt"
 
 # Set default parameters
 STEPS="[\033[95m STEPS \033[0m]"
@@ -103,7 +102,7 @@ adjust_settings() {
         sed -i "s|CONFIG_TARGET_IMAGES_GZIP=.*|# CONFIG_TARGET_IMAGES_GZIP is not set|g" .config
 	sed -i "s/install \$(BUILD_PACKAGES)/install \$(BUILD_PACKAGES) --force-overwrite/" Makefile
         sed -i "s/CONFIG_TARGET_KERNEL_PARTSIZE=16/CONFIG_TARGET_KERNEL_PARTSIZE=64/" .config
-	sed -i "s/CONFIG_TARGET_ROOTFS_PARTSIZE=800/CONFIG_TARGET_ROOTFS_PARTSIZE=1024/" .config
+	sed -i "s/CONFIG_TARGET_ROOTFS_PARTSIZE=300/CONFIG_TARGET_ROOTFS_PARTSIZE=800/" .config
 
     else
         echo -e "${INFO} [ ${imagebuilder_path} ] directory status: $(ls -al 2>/dev/null)"
@@ -160,7 +159,7 @@ custom_config() {
 
 
 
-CLASH_META_URL="https://github.com/SunHHB/ShellCrash/raw/master/bin/meta/clash-linux-amd64"
+CLASH_META_URL="https://github.com/SunHHB/ShellCrash/blob/master/bin/meta/clash-linux-armv8"
 
 CORE_MATE="https://github.com/SunHHB/ShellCrash/raw/master/bin/meta/clash-linux-amd64.tar.gz"
 

@@ -42,6 +42,7 @@ openwrt_dir="imagebuilder"
 imagebuilder_path="${make_path}/${openwrt_dir}"
 custom_files_path="${make_path}/config/imagebuilder/files"
 custom_config_file="${make_path}/config/imagebuilder/config"
+external_package_urls_path="${make_path}/config/imagebuilder/external-package-urls23.05.txt"
 
 # Set default parameters
 STEPS="[\033[95m STEPS \033[0m]"
@@ -145,12 +146,9 @@ custom_packages() {
     echo -e "${INFO} The [ ${amlogic_i18n} ] is downloaded successfully."
 
     # Download other luci-app-xxx
-    download_packages_file="https://github.com/SunHHB/op_s9xx/releases/download/armsr_immortalwrt.git-openwrt-23.05_25.01.05_04.16.32/packages.tar.gz"
-    curl -fsSOL ${download_packages_file}
-    [[ "${?}" -eq "0" ]] || error_msg "Download failed: [ ${download_packages_file} ]"
-
-    # Unzip 
-    tar -xJf *packages* && sync && rm -f *packages*.tar.xz
+    cat external-package-urls23.05.txt | xargs wget
+    ls *.tar.gz | xargs -n1 tar xzvf
+    rm *tar.gz
 
     sync && sleep 3
     echo -e "${INFO} [ packages ] directory status: $(ls -al 2>/dev/null)"

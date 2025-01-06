@@ -145,7 +145,12 @@ custom_packages() {
     echo -e "${INFO} The [ ${amlogic_i18n} ] is downloaded successfully."
 
     # Download other luci-app-xxx
-    # ......
+    download_packages_file="https://github.com/SunHHB/op_s9xx/releases/download/armsr_immortalwrt.git-openwrt-23.05_25.01.05_04.16.32/packages.tar.gz"
+    curl -fsSOL ${download_packages_file}
+    [[ "${?}" -eq "0" ]] || error_msg "Download failed: [ ${download_packages_file} ]"
+
+    # Unzip 
+    tar -xJf *packages* && sync && rm -f *packages*.tar.xz
 
     sync && sleep 3
     echo -e "${INFO} [ packages ] directory status: $(ls -al 2>/dev/null)"
@@ -207,6 +212,7 @@ rebuild_firmware() {
         luci-mod-status luci-mod-system luci-proto-3g luci-proto-bonding luci-proto-ipip luci-proto-ipv6 \
         luci-proto-ncm luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay \
         \
+        tailscale luci-app-tailscale luci-i18n-tailscale-zh-cn\
         luci-app-amlogic luci-i18n-amlogic-zh-cn \
         \
         ${config_list} \

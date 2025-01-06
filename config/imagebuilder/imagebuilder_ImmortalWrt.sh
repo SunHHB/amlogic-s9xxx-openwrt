@@ -188,31 +188,67 @@ rebuild_firmware() {
     echo -e "${STEPS} Start building OpenWrt with Image Builder..."
 
     # Selecting default packages, lib, theme, app and i18n, etc.
-    my_packages="\
-        acpid attr base-files bash bc blkid block-mount blockd bsdtar btrfs-progs busybox bzip2 \
-        cgi-io chattr comgt comgt-ncm containerd coremark coreutils coreutils-base64 coreutils-nohup \
-        coreutils-truncate curl docker docker-compose dockerd dosfstools dumpe2fs e2freefrag e2fsprogs \
-        exfat-mkfs f2fs-tools f2fsck fdisk gawk getopt git gzip hostapd-common iconv iw iwinfo jq \
-        jshn kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 libjson-script liblucihttp \
-        liblucihttp-lua losetup lsattr lsblk lscpu mkf2fs mount-utils openssl-util parted \
-        perl-http-date perlbase-file perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 \
-        pigz ppp ppp-mod-pppoe proto-bonding pv rename resize2fs runc tar tini ttyd tune2fs \
-        uclient-fetch uhttpd uhttpd-mod-ubus unzip uqmi usb-modeswitch uuidgen wget-ssl whereis \
-        which wpad-basic wwan xfs-fsck xfs-mkfs xz xz-utils ziptool zoneinfo-asia zoneinfo-core zstd \
-        \
-        luci luci-base luci-compat luci-i18n-base-zh-cn luci-lib-base luci-lib-docker \
-        luci-lib-ip luci-lib-ipkg luci-lib-jsonc luci-lib-nixio luci-mod-admin-full luci-mod-network \
-        luci-mod-status luci-mod-system luci-proto-3g luci-proto-bonding luci-proto-ipip luci-proto-ipv6 \
-        luci-proto-ncm luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay \
-        \
-        tailscale luci-app-tailscale luci-i18n-tailscale-zh-cn\
-        luci-app-amlogic luci-i18n-amlogic-zh-cn \
-        \
-        ${config_list} \
-        "
+     make info
+     # 主配置名称
+     
+     PACKAGES=""
+      # 主题
+     PACKAGES="$PACKAGES luci-theme-argon luci-i18n-argon-config-zh-cn"
+     # 常用kmod组件
+     PACKAGES="$PACKAGES git bash"
+     PACKAGES="$PACKAGES kmod-usb2 kmod-usb3 kmod-usb-ohci kmod-usb-uhci usbutils"
+     PACKAGES="$PACKAGES kmod-usb-printer"
+     # MT76x2u 网卡驱动或无线组件
+     PACKAGES="$PACKAGES kmod-mt76x2u hostapd wpa-supplicant"
+     # 常用软件服务
+     PACKAGES="$PACKAGES luci-i18n-usb-printer-zh-cn"
+     PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
+     PACKAGES="$PACKAGES luci-i18n-vlmcsd-zh-cn"
+     PACKAGES="$PACKAGES luci-i18n-wol-zh-cn"
+     PACKAGES="$PACKAGES luci-i18n-ddns-go-zh-cn"
+     PACKAGES="$PACKAGES luci-i18n-autoreboot-zh-cn"
+     # PACKAGES="$PACKAGES luci-i18n-ramfree-zh-cn"
+     PACKAGES="$PACKAGES luci-i18n-cloudflared-zh-cn"
+     PACKAGES="$PACKAGES luci-i18n-socat-zh-cn"
+
+     # tailscale
+     PACKAGES="$PACKAGES tailscale"
+     PACKAGES="$PACKAGES luci-app-tailscale"
+     PACKAGES="$PACKAGES luci-i18n-tailscale-zh-cn"
+
+     #PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn"
+     # upnp
+     PACKAGES="$PACKAGES luci-i18n-upnp-zh-cn"
+     # OpenClash 代理
+     PACKAGES="$PACKAGES luci-app-openclash"
+    # Docker 组件
+    # PACKAGES="$PACKAGES luci-lib-docker luci-i18n-dockerman-zh-cn"
+    # homeproxy 组件
+    # PACKAGES="$PACKAGES luci-i18n-homeproxy-zh-cn"
+    # alsit 组件	
+    PACKAGES="$PACKAGES alist luci-i18n-alist-zh-cn"
+    # mosdns 组件	
+    PACKAGES="$PACKAGES luci-i18n-mosdns-zh-cn"
+    # XUNLEI组件
+    # PACKAGES="$PACKAGES libc6-compat xunlei luci-app-xunlei luci-i18n-xunlei-zh-cn"
+    # 宽带监控 Nlbwmon
+    PACKAGES="$PACKAGES luci-i18n-nlbwmon-zh-cn"
+    # Diskman 磁盘管理
+    PACKAGES="$PACKAGES luci-i18n-diskman-zh-cn"
+    # zsh 终端
+    PACKAGES="$PACKAGES zsh"
+    PACKAGES="luci-app-amlogic luci-i18n-amlogic-zh-cn"
+    # Vim 完整版，带语法高亮
+    PACKAGES="$PACKAGES vim-fuller"
+    # 界面翻译补全
+    PACKAGES="$PACKAGES luci-i18n-opkg-zh-cn luci-i18n-base-zh-cn luci-i18n-firewall-zh-cn"
+    # 移除不需要的包
+
+    # 一些自定义文件
+    FILES="files"
 
     # Rebuild firmware
-    make image PROFILE="${target_profile}" PACKAGES="${my_packages}" FILES="files"
+    make image PROFILE="${target_profile}" PACKAGES="$PACKAGES" FILES="files"
 
     sync && sleep 3
     echo -e "${INFO} [ ${openwrt_dir}/bin/targets/*/* ] directory status: $(ls bin/targets/*/* -al 2>/dev/null)"

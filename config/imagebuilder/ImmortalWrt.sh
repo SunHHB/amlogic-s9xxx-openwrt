@@ -152,15 +152,39 @@ custom_packages() {
 # Add custom packages, lib, theme, app and i18n, etc.
 custom_config() {
     cd ${imagebuilder_path}
-    echo -e "${STEPS} Start adding custom config..."
+    echo "Start Clash Core Download !"
+    mkdir -p files/etc/openclash && cd files/etc/openclash
 
-    config_list=""
-    if [[ -s "${custom_config_file}" ]]; then
-        config_list="$(cat ${custom_config_file} 2>/dev/null | grep -E "^CONFIG_PACKAGE_.*=y" | sed -e 's/CONFIG_PACKAGE_//g' -e 's/=y//g' -e 's/[ ][ ]*//g' | tr '\n' ' ')"
-        echo -e "${INFO} Custom config list: \n$(echo "${config_list}" | tr ' ' '\n')"
-    else
-        echo -e "${INFO} No custom config was added."
-    fi
+
+
+CLASH_META_URL="https://github.com/SunHHB/ShellCrash/raw/master/bin/meta/clash-linux-amd64"
+
+CORE_MATE="https://github.com/SunHHB/ShellCrash/raw/master/bin/meta/clash-linux-amd64.tar.gz"
+
+
+GEO_MMDB="https://github.com/alecthw/mmdb_china_ip_list/raw/release/lite/Country.mmdb"
+GEO_SITE="https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geosite.dat"
+GEO_IP="https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geoip.dat"
+GEO_META="https://github.com/MetaCubeX/meta-rules-dat/raw/release/geoip.metadb"
+	
+ 
+curl -sfL -o Country.mmdb $GEO_MMDB
+curl -sfL -o GeoSite.dat $GEO_SITE
+curl -sfL -o GeoIP.dat $GEO_IP
+curl -sfL -o GeoIP.metadb $GEO_META
+
+
+mkdir ./core/ && cd ./core/
+
+# curl -sfL -o meta.tar.gz $CORE_MATE && tar -zxf meta.tar.gz && mv -f CrashCore clash_meta
+#wget -qO- $CORE_MATE | tar xOvz > clash_meta
+
+wget -qO- $CLASH_META_URL > clash_meta
+
+chmod +x ./clash* && rm -rf ./*.gz
+
+echo "openclash date has been updated!"
+ 
 }
 
 # Add custom files

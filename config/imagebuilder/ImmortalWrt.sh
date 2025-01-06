@@ -141,7 +141,7 @@ custom_packages() {
     echo -e "${INFO} The [ ${amlogic_i18n} ] is downloaded successfully."
 
     # Download other luci-app-xxx
-    cat external-package-urls23.05.txt | xargs wget
+    cat externalpackageurls.txt | xargs wget
     ls *.tar.gz | xargs -n1 tar xzvf
     rm *tar.gz
 

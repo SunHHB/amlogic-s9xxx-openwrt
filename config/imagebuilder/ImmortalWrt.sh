@@ -143,7 +143,24 @@ custom_packages() {
     echo -e "${INFO} The [ ${amlogic_i18n} ] is downloaded successfully."
 
     # Download other luci-app-xxx
-    cat externalpackageurls.txt | xargs wget
+    other_packages="armv8_packages"
+    other_packages_down="https://github.com/SunHHB/op_s9xx/releases/latest/download/packages.tar.gz"
+    curl -fsSOJL ${other_packages}
+    [[ "${?}" -eq "0" ]] || error_msg "[ ${other_packages} ] download failed!"
+    echo -e "${INFO} The [ ${other_packages} ] is downloaded successfully."
+
+    luci_openclash="luci-app-openclash"
+    luci_openclash_down="https://github.com/vernesong/OpenClash/releases/download/v0.46.064/luci-app-openclash_0.46.064_all.ipk"
+    curl -fsSOJL ${luci_openclash_down}
+    [[ "${?}" -eq "0" ]] || error_msg "[ ${luci_openclash} ] download failed!"
+    echo -e "${INFO} The [ ${luci_openclash} ] is downloaded successfully."
+    
+    luci_cloudflared="luci-app-cloudflared"
+    luci_cloudflared_down="https://github.com/moetayuko/openwrt-cloudflared/releases/download/2024.11.0-r1/cloudflared-2024.11.0-r1-aarch64_generic.apk"
+    curl -fsSOJL ${luci_cloudflared_down}
+    [[ "${?}" -eq "0" ]] || error_msg "[ ${luci_cloudflared} ] download failed!"
+    echo -e "${INFO} The [ ${luci_cloudflared} ] is downloaded successfully."
+    
     ls *.tar.gz | xargs -n1 tar xzvf
     rm *tar.gz
 
@@ -156,36 +173,23 @@ custom_config() {
     cd ${imagebuilder_path}
     echo "Start Clash Core Download !"
     mkdir -p files/etc/openclash && cd files/etc/openclash
-
-
-
-CLASH_META_URL="https://github.com/SunHHB/ShellCrash/blob/master/bin/meta/clash-linux-armv8"
-
-CORE_MATE="https://github.com/SunHHB/ShellCrash/raw/master/bin/meta/clash-linux-amd64.tar.gz"
-
-
-GEO_MMDB="https://github.com/alecthw/mmdb_china_ip_list/raw/release/lite/Country.mmdb"
-GEO_SITE="https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geosite.dat"
-GEO_IP="https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geoip.dat"
-GEO_META="https://github.com/MetaCubeX/meta-rules-dat/raw/release/geoip.metadb"
-	
- 
-curl -sfL -o Country.mmdb $GEO_MMDB
-curl -sfL -o GeoSite.dat $GEO_SITE
-curl -sfL -o GeoIP.dat $GEO_IP
-curl -sfL -o GeoIP.metadb $GEO_META
-
-
-mkdir ./core/ && cd ./core/
-
-# curl -sfL -o meta.tar.gz $CORE_MATE && tar -zxf meta.tar.gz && mv -f CrashCore clash_meta
-#wget -qO- $CORE_MATE | tar xOvz > clash_meta
-
-wget -qO- $CLASH_META_URL > clash_meta
-
-chmod +x ./clash* && rm -rf ./*.gz
-
-echo "openclash date has been updated!"
+    CLASH_META_URL="https://github.com/SunHHB/ShellCrash/blob/master/bin/meta/clash-linux-armv8"
+    CORE_MATE="https://github.com/SunHHB/ShellCrash/raw/master/bin/meta/clash-linux-amd64.tar.gz"
+    GEO_MMDB="https://github.com/alecthw/mmdb_china_ip_list/raw/release/lite/Country.mmdb"
+    GEO_SITE="https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geosite.dat"
+    GEO_IP="https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geoip.dat"
+    GEO_META="https://github.com/MetaCubeX/meta-rules-dat/raw/release/geoip.metadb"
+   
+    curl -sfL -o Country.mmdb $GEO_MMDB
+    curl -sfL -o GeoSite.dat $GEO_SITE
+    curl -sfL -o GeoIP.dat $GEO_IP
+    curl -sfL -o GeoIP.metadb $GEO_META
+    mkdir ./core/ && cd ./core/
+  # curl -sfL -o meta.tar.gz $CORE_MATE && tar -zxf meta.tar.gz && mv -f CrashCore clash_meta
+  #wget -qO- $CORE_MATE | tar xOvz > clash_meta
+   wget -qO- $CLASH_META_URL > clash_meta
+   chmod +x ./clash* && rm -rf ./*.gz
+   echo "openclash date has been updated!"
  
 }
 

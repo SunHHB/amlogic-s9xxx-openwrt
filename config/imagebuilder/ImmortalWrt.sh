@@ -145,7 +145,7 @@ custom_packages() {
     # Download other luci-app-xxx
     other_packages="armv8_packages"
     other_packages_down="https://github.com/SunHHB/op_s9xx/releases/latest/download/packages.tar.gz"
-    curl -fsSOJL ${other_packages}
+    curl -fsSOJL ${other_packages_down}
     [[ "${?}" -eq "0" ]] || error_msg "[ ${other_packages} ] download failed!"
     echo -e "${INFO} The [ ${other_packages} ] is downloaded successfully."
 

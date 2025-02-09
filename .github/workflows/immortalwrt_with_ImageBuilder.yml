@@ -6,7 +6,7 @@
 #                https://downloads.immortalwrt.org/releases
 #=====================================================================================
 
-name: Build immortalwrt with ImageBuilder
+name: Build immortalwrt_with ImageBuilder
 
 on:
   repository_dispatch:
@@ -15,7 +15,7 @@ on:
       releases_branch:
         description: "Select the releases branch"
         required: false
-        default: "immortalwrt:23.05.4"
+        default: "openwrt:23.05.5"
         type: choice
         options:
           - immortalwrt:23.05.4
@@ -31,7 +31,7 @@ on:
           - s905w_s905x_s905mb_s905l3a_s905l3b_s905x2_s905x3_s912_s922x_s922x-ct2000_s922x-reva
           - s905x3-x88-pro-x3_s912-m8s-pro_s905x-t95_s912-t95z-plus_s905l3-unt400g1_s905lb-r3300l
           - s912-x92_s922x_s922x-ct2000_s922x-reva_seewo-sv21_smart-am40_station-m1_sw799_swan1-w28
-          - tanix-tx6_tb-ls3399_tn3399_tpm312_tqc-a01_tvi3315a_vplus_xiaobao_yskj_zcube1-max_zk-r39a_zysj
+          - tanix-tx6_tb-ls3399_tn3399_tpm312_tqc-a01_tvi3315a_vplus_wxy-oec_xiaobao_yskj_zcube1-max_zk-r39a_zysj
           - a311d
           - beikeyun
           - chainedbox
@@ -170,6 +170,7 @@ on:
           - tqc-a01
           - tvi3315a
           - vplus
+          - wxy-oec
           - xiaobao
           - yskj
           - zcube1-max
@@ -186,8 +187,11 @@ on:
           - 5.15.y
           - 6.1.y
           - 6.6.y
+          - 6.12.y
+          - 5.4.y_5.10.y
+          - 5.15.y_6.1.y
+          - 6.6.y_6.12.y
           - 6.1.y_6.6.y
-          - 5.15.y_5.10.y
       auto_kernel:
         description: "Auto use the latest kernel"
         required: false
@@ -222,7 +226,7 @@ on:
 
 env:
   TZ: America/New_York
-  IMAGEBUILDER_SH: config/imagebuilder/ImmortalWrt.sh
+  IMAGEBUILDER_SH: config/imagebuilder/imagebuilder.sh
 
 jobs:
   build:
@@ -245,7 +249,7 @@ jobs:
           sudo rm -f /swapfile /mnt/swapfile
           sudo -E apt-get -y update
           sudo -E apt-get -y purge azure-cli ghc* zulu* llvm* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
-          sudo -E apt-get -y install $(curl -fsSL https://is.gd/depend_ubuntu2204_openwrt)
+          sudo -E apt-get -y install $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
           sudo -E systemctl daemon-reload
           #sudo -E apt-get -y full-upgrade
           sudo -E apt-get -y autoremove --purge
@@ -287,7 +291,7 @@ jobs:
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
         run: |
           cd imagebuilder
-          #rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+          rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
 
           [[ -d "/builder/openwrt" ]] || mkdir -p /builder/openwrt
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt

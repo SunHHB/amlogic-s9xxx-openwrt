@@ -67,7 +67,7 @@ download_imagebuilder() {
     if [[ "${op_branch:0:2}" -ge "23" && "${op_branch:3:2}" -ge "05" ]]; then
         target_system="armsr/armv8"
         target_name="armsr-armv8"
-        target_profile=""
+        target_profile="generic"
     else
         target_system="armvirt/64"
         target_name="armvirt-64"
@@ -144,7 +144,7 @@ custom_packages() {
 
     # Download other luci-app-xxx
     other_packages="armv8_packages"
-    other_packages_down="https://github.com/SunHHB/op_s9xx/releases/latest/download/packages.tar.gz"
+    other_packages_down="https://github.com/SunHHB/op_armsr/releases/latest/download/packages.tar.gz"
     curl -fsSOJL ${other_packages_down}
     [[ "${?}" -eq "0" ]] || error_msg "[ ${other_packages} ] download failed!"
     echo -e "${INFO} The [ ${other_packages} ] is downloaded successfully."
@@ -156,7 +156,7 @@ custom_packages() {
     echo -e "${INFO} The [ ${luci_openclash} ] is downloaded successfully."
     
     luci_cloudflared="luci-app-cloudflared"
-    luci_cloudflared_down="https://github.com/moetayuko/openwrt-cloudflared/releases/download/2024.11.0-r1/cloudflared-2024.11.0-r1-aarch64_generic.apk"
+    luci_cloudflared_down="https://github.com/moetayuko/openwrt-cloudflared/releases/download/2025.1.1-r1/cloudflared-2025.1.1-r1-aarch64_generic.apk"
     curl -fsSOJL ${luci_cloudflared_down}
     [[ "${?}" -eq "0" ]] || error_msg "[ ${luci_cloudflared} ] download failed!"
     echo -e "${INFO} The [ ${luci_cloudflared} ] is downloaded successfully."
@@ -173,8 +173,7 @@ custom_config() {
     cd ${imagebuilder_path}
     echo "Start Clash Core Download !"
     mkdir -p files/etc/openclash && cd files/etc/openclash
-    CLASH_META_URL="https://github.com/SunHHB/ShellCrash/blob/master/bin/meta/clash-linux-armv8"
-    CORE_MATE="https://github.com/SunHHB/ShellCrash/raw/master/bin/meta/clash-linux-amd64.tar.gz"
+    CLASH_META_URL="https://github.com/SunHHB/ShellCrash/raw/refs/heads/dev/bin/meta/clash-linux-armv8"
     GEO_MMDB="https://github.com/alecthw/mmdb_china_ip_list/raw/release/lite/Country.mmdb"
     GEO_SITE="https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geosite.dat"
     GEO_IP="https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geoip.dat"
